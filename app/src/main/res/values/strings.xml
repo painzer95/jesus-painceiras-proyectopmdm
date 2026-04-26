@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Gestion Peliculas</string>
+    <string name="txt_Welcome">Bienvenido</string>
+    <string name="txt_email">Correo electrónico</string>
+    <string name="txt_errorEmail">El correo no puede estar vacío!</string>
+    <string name="txt_password">Contraseña</string>
+    <string name="txt_errorPassword">La contraseña no puede estar vacía!</string>
+    <string name="txt_name">Nombre completo</string>
+    <string name="txt_createAccount">Crear Cuenta</string>
+    <string name="txt_repeatPassword">Repetir la contraseña</string>
+    <string name="txt_errorEmptyTextField">Todos los campos deben estar cubiertos correctamente.</string>
+    <string name="txt_errorPasswordMatch">Las contraseñas no coinciden.</string>
+    <string name="txt_buttonRegister">Registrarse</string>
+    <string name="txt_buttonLogin">Entrar</string>
+    <string name="txt_filmTitle">Título de la película</string>
+    <string name="txt_genere">Género</string>
+    <string name="txt_director">Director</string>
+    <string name="txt_score">Nota</string>
+    <string name="txt_buttonSaveFilm">Guardar Película</string>
+    <string name="txt_buttonCancelEdit">Cancelar</string>
 </resources>
