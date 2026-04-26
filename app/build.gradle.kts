@@ -40,8 +40,6 @@ android {
     }
 }
 
-// AQUÍ ESTÁ EL ARREGLO:
-// El nuevo bloque de opciones del compilador de Kotlin va fuera de "android"
 kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
