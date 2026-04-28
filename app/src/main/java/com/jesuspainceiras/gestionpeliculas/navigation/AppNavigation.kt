@@ -1,13 +1,11 @@
 package com.jesuspainceiras.gestionpeliculas.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
-import com.jesuspainceiras.gestionpeliculas.models.Pelicula
+import com.jesuspainceiras.gestionpeliculas.data.misPeliculasMock
 import com.jesuspainceiras.gestionpeliculas.screens.RegistroScreen
 import com.jesuspainceiras.gestionpeliculas.screens.LoginScreen
 import com.jesuspainceiras.gestionpeliculas.screens.ListaPeliculasScreen
@@ -31,15 +29,6 @@ data class PantallaFormulario(val indicePelicula: Int = -1) : NavKey
 fun AppNavigation() {
     val backStack = rememberNavBackStack(PantallaLogin)
 
-    // Guardamos la lista mutable de películas.
-    val misPeliculas = remember {
-        mutableStateListOf(
-            Pelicula("Expediente Warren: The Conjuring", "Terror", "James Wan", 6.8),
-            Pelicula("La llegada", "Ciencia ficción", "Denis Villeneuve", 7.3),
-            Pelicula("Mad Max: Furia en la carretera", "Ciencia ficción", "George Miller", 7.1)
-        )
-    }
-
     NavDisplay(
         backStack = backStack,
         entryProvider = entryProvider {
@@ -62,7 +51,7 @@ fun AppNavigation() {
 
             entry<PantallaLista> {
                 ListaPeliculasScreen(
-                    peliculas = misPeliculas,
+                    peliculas = misPeliculasMock,
                     onNavigateToFormulario = { indice ->
                         backStack.add(PantallaFormulario(indice))
                     }
@@ -72,7 +61,7 @@ fun AppNavigation() {
             entry<PantallaFormulario> { navKey ->
                 FormularioPeliculaScreen(
                     indice = navKey.indicePelicula,
-                    listaPeliculas = misPeliculas,
+                    listaPeliculas = misPeliculasMock,
                     onVolver = { backStack.removeLastOrNull() }
                 )
             }

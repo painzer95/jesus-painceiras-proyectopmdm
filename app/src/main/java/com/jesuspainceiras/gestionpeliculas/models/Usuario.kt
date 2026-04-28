@@ -2,10 +2,7 @@ package com.jesuspainceiras.gestionpeliculas.models
 
 import java.util.UUID
 
-data class Pelicula(
+data class Usuario(
     val id: String = UUID.randomUUID().toString(), // Generamos un ID único por defecto.
-    val titulo: String,
-    val genero: String,
-    val director: String,
-    val nota: Double
+    val email: String
 )

@@ -31,7 +31,12 @@ fun FormularioPeliculaScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (esNueva) "Añadir Película" else "Editar Película", color = MaterialTheme.colorScheme.onPrimary) },
+                title = {
+                    Text(
+                        if (esNueva) "Añadir Película" else "Editar Película",
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
         }
@@ -81,7 +86,11 @@ fun FormularioPeliculaScreen(
 
             if (errorCampos) {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(stringResource(R.string.txt_errorEmptyTextField), color = MaterialTheme.colorScheme.error, fontSize = 12.sp)
+                Text(
+                    stringResource(R.string.txt_errorEmptyTextField),
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 12.sp
+                )
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -92,7 +101,13 @@ fun FormularioPeliculaScreen(
                     if (titulo.isEmpty() || genero.isEmpty() || director.isEmpty() || notaNumerica == null) {
                         errorCampos = true
                     } else {
-                        val nuevaPelicula = Pelicula(titulo, genero, director, notaNumerica)
+                        // Aquí debemos modificar de nuevo indicando que datos le pasamos al tener ahora el ID automático.
+                        val nuevaPelicula = Pelicula(
+                            titulo = titulo,
+                            genero = genero,
+                            director = director,
+                            nota = notaNumerica
+                        )
                         if (esNueva) {
                             listaPeliculas.add(nuevaPelicula)
                         } else {
