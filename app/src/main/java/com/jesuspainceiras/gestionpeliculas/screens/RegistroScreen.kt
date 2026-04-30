@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -21,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jesuspainceiras.gestionpeliculas.R
+import com.jesuspainceiras.gestionpeliculas.components.CineInput
 
 @Composable
 fun RegistroScreen(
@@ -53,47 +53,39 @@ fun RegistroScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        OutlinedTextField(
+        CineInput(
             value = nombre,
             onValueChange = { nombre = it; errorVacio = false },
-            label = { Text(stringResource(R.string.txt_name)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
+            label = "Nombre completo",
             isError = errorVacio
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
+        CineInput(
             value = email,
             onValueChange = { email = it; errorVacio = false },
-            label = { Text(stringResource(R.string.txt_email)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
+            label = "Correo electrónico",
             isError = errorVacio
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
+        CineInput(
             value = password1,
             onValueChange = { password1 = it; errorVacio = false; errorContrasenas = false },
-            label = { Text(stringResource(R.string.txt_password)) },
+            label = "Escriba la contraseña",
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
             isError = errorVacio || errorContrasenas
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
+        CineInput(
             value = password2,
             onValueChange = { password2 = it; errorVacio = false; errorContrasenas = false },
-            label = { Text(stringResource(R.string.txt_repeatPassword)) },
+            label = "Repita la contraseña",
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
             isError = errorVacio || errorContrasenas
         )
 

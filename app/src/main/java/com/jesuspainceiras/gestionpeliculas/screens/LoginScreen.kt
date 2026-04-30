@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -21,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jesuspainceiras.gestionpeliculas.R
+import com.jesuspainceiras.gestionpeliculas.components.CineInput
 
 @Composable
 fun LoginScreen(
@@ -55,40 +55,26 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        OutlinedTextField(
+        CineInput(
             value = email,
-            onValueChange = {
-                email = it
-                errorEmail = false
-            },
-            placeholder = { Text(stringResource(R.string.txt_email)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
+            onValueChange = { email = it; errorEmail = false },
+            label = "Correo electrónico",
             isError = errorEmail,
             supportingText = {
-                if (errorEmail) {
-                    Text(stringResource(R.string.txt_errorEmail))
-                }
+                if (errorEmail) Text("El correo no puede estar vacío!")
             }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
+        CineInput(
             value = password,
-            onValueChange = {
-                password = it
-                errorPassword = false
-            },
-            label = { Text(stringResource(R.string.txt_password)) },
+            onValueChange = { password = it; errorPassword = false },
+            label = "Contraseña",
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
             isError = errorPassword,
             supportingText = {
-                if (errorPassword) {
-                    Text(stringResource(R.string.txt_errorPassword))
-                }
+                if (errorPassword) Text("La contraseña no puede estar vacía!")
             }
         )
 

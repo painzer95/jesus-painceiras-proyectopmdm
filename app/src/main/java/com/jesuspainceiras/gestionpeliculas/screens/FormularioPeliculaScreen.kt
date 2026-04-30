@@ -9,6 +9,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jesuspainceiras.gestionpeliculas.R
+import com.jesuspainceiras.gestionpeliculas.components.CineInput
 import com.jesuspainceiras.gestionpeliculas.models.Pelicula
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,39 +50,34 @@ fun FormularioPeliculaScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            OutlinedTextField(
+            CineInput(
                 value = titulo,
                 onValueChange = { titulo = it; errorCampos = false },
-                label = { Text(stringResource(R.string.txt_filmTitle)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
+                label = stringResource(R.string.txt_filmTitle)
             )
+
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
+            CineInput(
                 value = genero,
                 onValueChange = { genero = it; errorCampos = false },
-                label = { Text(stringResource(R.string.txt_genere)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
+                label = stringResource(R.string.txt_genere)
             )
+
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
+            CineInput(
                 value = director,
                 onValueChange = { director = it; errorCampos = false },
-                label = { Text(stringResource(R.string.txt_director)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
+                label = stringResource(R.string.txt_director)
             )
+
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
+            CineInput(
                 value = nota,
                 onValueChange = { nota = it; errorCampos = false },
-                label = { Text(stringResource(R.string.txt_score)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
+                label = stringResource(R.string.txt_score)
             )
 
             if (errorCampos) {
