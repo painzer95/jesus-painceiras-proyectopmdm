@@ -23,7 +23,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ListaPeliculasScreen(
     peliculas: MutableList<Pelicula>,
-    onNavigateToFormulario: (Int) -> Unit
+    // Modificamos el parámetro para que reciba un String (ID) en lugar de un Int.
+    onNavigateToFormulario: (String) -> Unit
 ) {
     // Variables para gestionar el SnackBar (Notificación inferior para deshacer).
     val snackbarHostState = remember { SnackbarHostState() }
@@ -43,7 +44,8 @@ fun ListaPeliculasScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { onNavigateToFormulario(-1) }, // -1 para crear una nueva.
+                // Modificamos el paso del parámetro a una cadena vacía para la mejora objetada por el profesor.
+                onClick = { onNavigateToFormulario("") }, // Cadena vacía para crear una nueva.
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
@@ -64,7 +66,7 @@ fun ListaPeliculasScreen(
             itemsIndexed(peliculas) { index, pelicula ->
                 TarjetaPelicula(
                     pelicula = pelicula,
-                    onClick = { onNavigateToFormulario(index) }, // Editar película.
+                    onClick = { onNavigateToFormulario(pelicula.id) }, // Editamos la película pasando su ID.
                     onDeleteClick = {
                         peliculaABorrarIndex = index
                         mostrarDialogoBorrar = true
@@ -130,7 +132,6 @@ fun TarjetaPelicula(
             .clickable { onClick() }, // Al hacer clic en la tarjeta, la editamos.
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(8.dp),
-        // Cambiamos el color de la tarjeta a surface para la mejora de coherencia visual objetada por el profesor.
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(
@@ -152,7 +153,6 @@ fun TarjetaPelicula(
                     text = pelicula.titulo,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
-                    // Usamos onSurface para la mejora de contraste respecto al nuevo fondo de la tarjeta.
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))

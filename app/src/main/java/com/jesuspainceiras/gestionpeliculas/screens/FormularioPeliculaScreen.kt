@@ -1,8 +1,6 @@
 package com.jesuspainceiras.gestionpeliculas.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,17 +15,19 @@ import com.jesuspainceiras.gestionpeliculas.models.Pelicula
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormularioPeliculaScreen(
-    indice: Int,
+    idPelicula: String,
     listaPeliculas: MutableList<Pelicula>,
     onVolver: () -> Unit
 ) {
-    val esNueva = indice == -1
+    // Buscamos la película por ID en lugar de por índice.
+    val peliculaEditar = listaPeliculas.find { it.id == idPelicula }
+    val esNueva = peliculaEditar == null
 
     // Si estamos editando, cogemos los datos de la película. Si no, campos en blanco.
-    var titulo by remember { mutableStateOf(if (esNueva) "" else listaPeliculas[indice].titulo) }
-    var genero by remember { mutableStateOf(if (esNueva) "" else listaPeliculas[indice].genero) }
-    var director by remember { mutableStateOf(if (esNueva) "" else listaPeliculas[indice].director) }
-    var nota by remember { mutableStateOf(if (esNueva) "" else listaPeliculas[indice].nota.toString()) }
+    var titulo by remember { mutableStateOf(peliculaEditar?.titulo ?: "") }
+    var genero by remember { mutableStateOf(peliculaEditar?.genero ?: "") }
+    var director by remember { mutableStateOf(peliculaEditar?.director ?: "") }
+    var nota by remember { mutableStateOf(peliculaEditar?.nota?.toString() ?: "") }
 
     var errorCampos by remember { mutableStateOf(false) }
 
@@ -40,17 +40,7 @@ fun FormularioPeliculaScreen(
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
-                // Añadimos el icono de navegación hacia atrás para la mejora objetada por el profesor.
-                navigationIcon = {
-                    IconButton(onClick = { onVolver() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Volver atrás",
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                }
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
         }
     ) { paddingValues ->
@@ -106,20 +96,36 @@ fun FormularioPeliculaScreen(
             Button(
                 onClick = {
                     val notaNumerica = nota.toDoubleOrNull()
-                    if (titulo.isEmpty() || genero.isEmpty() || director.isEmpty() || notaNumerica == null) {
+
+                    // Añadimos validación para que la nota esté estrictamente entre 0 y 10 para la mejora objetada por el profesor.
+                    val notaValida = notaNumerica != null && notaNumerica in 0.0..10.0
+
+                    // Modificamos el control de errores usando isBlank para evitar cadenas de espacios.
+                    if (titulo.isBlank() || genero.isBlank() || director.isBlank() || !notaValida) {
                         errorCampos = true
                     } else {
                         // Aquí debemos modificar de nuevo indicando que datos le pasamos al tener ahora el ID automático.
-                        val nuevaPelicula = Pelicula(
-                            titulo = titulo,
-                            genero = genero,
-                            director = director,
-                            nota = notaNumerica
-                        )
                         if (esNueva) {
+                            val nuevaPelicula = Pelicula(
+                                titulo = titulo,
+                                genero = genero,
+                                director = director,
+                                nota = notaNumerica!!
+                            )
                             listaPeliculas.add(nuevaPelicula)
                         } else {
-                            listaPeliculas[indice] = nuevaPelicula
+                            val peliculaModificada = Pelicula(
+                                id = peliculaEditar!!.id, // Conservamos el ID original.
+                                titulo = titulo,
+                                genero = genero,
+                                director = director,
+                                nota = notaNumerica!!
+                            )
+                            // Buscamos la posición de la película en la lista original para actualizarla.
+                            val indexActualizar = listaPeliculas.indexOfFirst { it.id == peliculaEditar.id }
+                            if (indexActualizar != -1) {
+                                listaPeliculas[indexActualizar] = peliculaModificada
+                            }
                         }
                         onVolver()
                     }

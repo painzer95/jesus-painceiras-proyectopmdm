@@ -21,9 +21,9 @@ data object PantallaRegistro : NavKey
 @Serializable
 data object PantallaLista : NavKey
 
-// Le pasamos el índice de la lista. Al poner -1, significa que es una película nueva.
+// Modificamos el parámetro para pasar el ID de la lista en lugar del índice para la mejora objetada por el profesor. Al pasar una cadena vacía, significa que es una película nueva.
 @Serializable
-data class PantallaFormulario(val indicePelicula: Int = -1) : NavKey
+data class PantallaFormulario(val idPelicula: String = "") : NavKey
 
 @Composable
 fun AppNavigation() {
@@ -52,15 +52,15 @@ fun AppNavigation() {
             entry<PantallaLista> {
                 ListaPeliculasScreen(
                     peliculas = misPeliculasMock,
-                    onNavigateToFormulario = { indice ->
-                        backStack.add(PantallaFormulario(indice))
+                    onNavigateToFormulario = { id ->
+                        backStack.add(PantallaFormulario(id))
                     }
                 )
             }
 
             entry<PantallaFormulario> { navKey ->
                 FormularioPeliculaScreen(
-                    indice = navKey.indicePelicula,
+                    idPelicula = navKey.idPelicula,
                     listaPeliculas = misPeliculasMock,
                     onVolver = { backStack.removeLastOrNull() }
                 )

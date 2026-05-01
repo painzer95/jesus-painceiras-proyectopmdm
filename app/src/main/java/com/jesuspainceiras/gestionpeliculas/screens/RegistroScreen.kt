@@ -101,15 +101,12 @@ fun RegistroScreen(
 
         Button(
             onClick = {
-                errorVacio = false
-                errorContrasenas = false
+                // Modificamos las validaciones usando isBlank para evitar registros vacíos o con espacios para la mejora objetada por el profesor.
+                errorVacio = nombre.isBlank() || email.isBlank() || password1.isBlank() || password2.isBlank()
+                errorContrasenas = password1 != password2
 
-                if (nombre.isEmpty() || email.isEmpty() || password1.isEmpty() || password2.isEmpty()) {
-                    errorVacio = true
-                } else if (password1 != password2) {
-                    errorContrasenas = true
-                } else {
-                    // GUARDAR EL EMAIL EN SHAREDPREFERENCES.
+                if (!errorVacio && !errorContrasenas) {
+                    // GUARDAMOS EL EMAIL EN SHAREDPREFERENCES.
                     sharedPreferences.edit().putString("email_registrado", email).apply()
 
                     onNavigateToLogin()

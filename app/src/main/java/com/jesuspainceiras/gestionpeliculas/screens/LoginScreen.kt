@@ -58,7 +58,7 @@ fun LoginScreen(
         )
 
         Text(
-            text = stringResource(R.string.app_name),
+            text = stringResource(R.string.txt_Welcome),
             fontSize = 32.sp,
             color = MaterialTheme.colorScheme.primary
         )
@@ -98,17 +98,11 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                var hayError = false
-                if (email.isEmpty()){
-                    errorEmail = true
-                    hayError = true
-                }
-                if (password.isEmpty()){
-                    errorPassword = true
-                    hayError = true
-                }
+                // Modificamos las validaciones usando isBlank y simplificamos la lógica para la mejora objetada por el profesor.
+                errorEmail = email.isBlank()
+                errorPassword = password.isBlank()
 
-                if (!hayError) {
+                if (!errorEmail && !errorPassword) {
                     onLoginSuccess()
                 }
             },
