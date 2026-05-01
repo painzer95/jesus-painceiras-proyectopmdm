@@ -80,14 +80,14 @@ fun ListaPeliculasScreen(
             AlertDialog(
                 onDismissRequest = { mostrarDialogoBorrar = false },
                 title = { Text("Eliminar película") },
-                text = { Text("¿Estás seguro de que quieres borrar esta película?") },
+                text = { Text("Estás seguro de que quieres borrar esta película?") },
                 confirmButton = {
                     Button(
                         onClick = {
                             val peliculaGuardada = peliculas[peliculaABorrarIndex]
                             val indexGuardado = peliculaABorrarIndex
 
-                            // Borramos la película
+                            // Borramos la película.
                             peliculas.removeAt(peliculaABorrarIndex)
                             mostrarDialogoBorrar = false
 
@@ -99,7 +99,7 @@ fun ListaPeliculasScreen(
                                     duration = SnackbarDuration.Short
                                 )
                                 if (resultado == SnackbarResult.ActionPerformed) {
-                                    // Si pulsa deshacer, la volvemos a meter donde estaba.
+                                    // Si pulsamos deshacer, la volvemos a meter donde estaba.
                                     peliculas.add(indexGuardado, peliculaGuardada)
                                 }
                             }
@@ -130,7 +130,8 @@ fun TarjetaPelicula(
             .clickable { onClick() }, // Al hacer clic en la tarjeta, la editamos.
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onSurfaceVariant)
+        // Cambiamos el color de la tarjeta a surface para la mejora de coherencia visual objetada por el profesor.
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(
             modifier = Modifier
@@ -151,6 +152,7 @@ fun TarjetaPelicula(
                     text = pelicula.titulo,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
+                    // Usamos onSurface para la mejora de contraste respecto al nuevo fondo de la tarjeta.
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))

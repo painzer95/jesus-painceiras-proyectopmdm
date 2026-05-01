@@ -14,7 +14,8 @@ fun CineInput(
     label: String,
     isError: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    supportingText: @Composable (() -> Unit)? = null
+    supportingText: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null
 ) {
     OutlinedTextField(
         value = value,
@@ -24,6 +25,7 @@ fun CineInput(
         singleLine = true,
         isError = isError,
         visualTransformation = visualTransformation,
-        supportingText = supportingText
+        supportingText = supportingText,
+        leadingIcon = leadingIcon
     )
 }

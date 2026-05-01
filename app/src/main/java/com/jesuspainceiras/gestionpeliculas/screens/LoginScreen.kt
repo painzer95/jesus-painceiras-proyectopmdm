@@ -2,6 +2,7 @@ package com.jesuspainceiras.gestionpeliculas.screens
 
 import android.content.Context
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -14,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,8 +49,16 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        // Logo de la aplicación con archivo local.
+        Icon(
+            painter = painterResource(id = R.drawable.ic_movie),
+            contentDescription = "Logo App",
+            modifier = Modifier.size(80.dp),
+            tint = MaterialTheme.colorScheme.primary
+        )
+
         Text(
-            text = stringResource(R.string.txt_Welcome),
+            text = stringResource(R.string.app_name),
             fontSize = 32.sp,
             color = MaterialTheme.colorScheme.primary
         )
@@ -60,6 +70,9 @@ fun LoginScreen(
             onValueChange = { email = it; errorEmail = false },
             label = "Correo electrónico",
             isError = errorEmail,
+            leadingIcon = {
+                Icon(painter = painterResource(id = R.drawable.ic_email), contentDescription = null)
+            },
             supportingText = {
                 if (errorEmail) Text("El correo no puede estar vacío!")
             }
@@ -73,6 +86,9 @@ fun LoginScreen(
             label = "Contraseña",
             visualTransformation = PasswordVisualTransformation(),
             isError = errorPassword,
+            leadingIcon = {
+                Icon(painter = painterResource(id = R.drawable.ic_password), contentDescription = null)
+            },
             supportingText = {
                 if (errorPassword) Text("La contraseña no puede estar vacía!")
             }
