@@ -34,4 +34,4 @@ A continuación, se detallan las decisiones técnicas tomadas para cumplir y mej
 
 ---
 **Autor:** Jesús Painceiras  
-**Versión:** 1.0
+**Versión:** 1.1
