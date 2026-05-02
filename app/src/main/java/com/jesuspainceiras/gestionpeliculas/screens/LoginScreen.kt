@@ -32,8 +32,9 @@ fun LoginScreen(
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE)
 
-    // Leemos el email guardado. Si no hay nada, devolvemos un texto vacío.
+    // Leemos el email guardado y también la contraseña para la validación v1.1. Si no hay nada, devolvemos un texto vacío.
     val emailGuardado = sharedPreferences.getString("email_registrado", "") ?: ""
+    val passwordGuardada = sharedPreferences.getString("password_registrada", "") ?: ""
 
     // Inicializamos el estado del email con el valor guardado.
     var email by remember { mutableStateOf(emailGuardado) }
@@ -41,6 +42,8 @@ fun LoginScreen(
 
     var errorEmail by remember { mutableStateOf(false) }
     var errorPassword by remember { mutableStateOf(false) }
+    // Añadimos un estado para mostrar el error si las credenciales fallan.
+    var errorCredenciales by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -68,9 +71,10 @@ fun LoginScreen(
 
         CineInput(
             value = email,
-            onValueChange = { email = it; errorEmail = false },
+            // Limpiamos también el error de credenciales si el usuario empieza a escribir de nuevo.
+            onValueChange = { email = it; errorEmail = false; errorCredenciales = false },
             label = stringResource(R.string.txt_email),
-            isError = errorEmail,
+            isError = errorEmail || errorCredenciales,
             leadingIcon = {
                 Icon(painter = painterResource(id = R.drawable.ic_email), contentDescription = null)
             },
@@ -83,10 +87,10 @@ fun LoginScreen(
 
         CineInput(
             value = password,
-            onValueChange = { password = it; errorPassword = false },
+            onValueChange = { password = it; errorPassword = false; errorCredenciales = false },
             label = stringResource(R.string.txt_password),
             visualTransformation = PasswordVisualTransformation(),
-            isError = errorPassword,
+            isError = errorPassword || errorCredenciales,
             leadingIcon = {
                 Icon(painter = painterResource(id = R.drawable.ic_password), contentDescription = null)
             },
@@ -94,6 +98,12 @@ fun LoginScreen(
                 if (errorPassword) Text(stringResource(R.string.txt_errorPassword))
             }
         )
+
+        // Mostramos el mensaje si el login es incorrecto.
+        if (errorCredenciales) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text("Credenciales incorrectas. Verifica tu email y contraseña.", color = MaterialTheme.colorScheme.error, fontSize = 12.sp)
+        }
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -104,7 +114,15 @@ fun LoginScreen(
                 errorPassword = password.isBlank()
 
                 if (!errorEmail && !errorPassword) {
-                    onLoginSuccess()
+                    // Validamos contra la cuenta guardada en memoria o la cuenta de administrador que hemos creado por defecto.
+                    val esCuentaGuardada = email == emailGuardado && password == passwordGuardada && emailGuardado.isNotEmpty()
+                    val esCuentaAdmin = email == "admin@cineapp.com" && password == "1234"
+
+                    if (esCuentaGuardada || esCuentaAdmin) {
+                        onLoginSuccess()
+                    } else {
+                        errorCredenciales = true
+                    }
                 }
             },
             modifier = Modifier.fillMaxWidth()

@@ -108,8 +108,12 @@ fun RegistroScreen(
                 errorContrasenas = password1 != password2
 
                 if (!errorVacio && !errorContrasenas) {
-                    // GUARDAR EL EMAIL EN SHAREDPREFERENCES. Modifico esta linea con la sugerencia de cambio del IDE
-                    sharedPreferences.edit { putString("email_registrado", email) }
+                    // GUARDAR EL EMAIL EN SHAREDPREFERENCES. Modifico esta linea con la sugerencia de cambio del IDE.
+                    sharedPreferences.edit {
+                        putString("email_registrado", email)
+                        // Añadimos también el guardado de la contraseña para la validación v1.1.
+                        putString("password_registrada", password1)
+                    }
 
                     onNavigateToLogin()
                 }
