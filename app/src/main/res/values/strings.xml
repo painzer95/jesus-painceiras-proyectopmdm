@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Gestion Peliculas</string>
+    <string name="app_name_display">CineApp</string>
     <string name="txt_Welcome">Bienvenido</string>
     <string name="txt_email">Correo electrónico</string>
     <string name="txt_errorEmail">El correo no puede estar vacío!</string>
@@ -7,15 +8,35 @@
     <string name="txt_errorPassword">La contraseña no puede estar vacía!</string>
     <string name="txt_name">Nombre completo</string>
     <string name="txt_createAccount">Crear Cuenta</string>
-    <string name="txt_repeatPassword">Repetir la contraseña</string>
+    <string name="txt_write_password">Escriba la contraseña</string>
+    <string name="txt_repeatPassword">Repita la contraseña</string>
     <string name="txt_errorEmptyTextField">Todos los campos deben estar cubiertos correctamente.</string>
     <string name="txt_errorPasswordMatch">Las contraseñas no coinciden.</string>
     <string name="txt_buttonRegister">Registrarse</string>
     <string name="txt_buttonLogin">Entrar</string>
+    <string name="txt_no_account">No tienes cuenta? Regístrate aquí</string>
+    <string name="txt_already_account">Ya tienes cuenta? Inicia sesión</string>
+
     <string name="txt_filmTitle">Título de la película</string>
     <string name="txt_genere">Género</string>
     <string name="txt_director">Director</string>
     <string name="txt_score">Nota</string>
     <string name="txt_buttonSaveFilm">Guardar Película</string>
     <string name="txt_buttonCancelEdit">Cancelar</string>
+
+    <string name="txt_movie_list">Lista de películas</string>
+    <string name="txt_add_movie">Añadir película</string>
+    <string name="txt_delete_movie">Eliminar película</string>
+    <string name="txt_confirm_delete">Estás seguro de que quieres borrar esta película?</string>
+    <string name="txt_movie_deleted">Película eliminada</string>
+    <string name="txt_undo">Deshacer</string>
+    <string name="txt_yes_delete">Sí, borrar</string>
+    <string name="txt_cancel">Cancelar</string>
+    <string name="txt_genre_label">Género: %1$s</string>
+    <string name="txt_director_label">Director: %1$s</string>
+    <string name="txt_delete_movie_desc">Borrar película</string>
+
+    <string name="txt_add_movie_title">Añadir Película</string>
+    <string name="txt_edit_movie_title">Editar Película</string>
+    <string name="txt_go_back">Volver atrás</string>
 </resources>

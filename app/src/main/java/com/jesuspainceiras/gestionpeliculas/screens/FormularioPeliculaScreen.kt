@@ -1,6 +1,8 @@
 package com.jesuspainceiras.gestionpeliculas.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -35,12 +37,23 @@ fun FormularioPeliculaScreen(
         topBar = {
             TopAppBar(
                 title = {
+                    // Internacionalizamos el título superior dependiendo de si es nueva o editada.
                     Text(
-                        if (esNueva) "Añadir Película" else "Editar Película",
+                        if (esNueva) stringResource(R.string.txt_add_movie_title) else stringResource(R.string.txt_edit_movie_title),
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
+                // Añadimos el icono de navegación hacia atrás.
+                navigationIcon = {
+                    IconButton(onClick = { onVolver() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.txt_go_back),
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                }
             )
         }
     ) { paddingValues ->
@@ -104,7 +117,7 @@ fun FormularioPeliculaScreen(
                     if (titulo.isBlank() || genero.isBlank() || director.isBlank() || !notaValida) {
                         errorCampos = true
                     } else {
-                        // Aquí debemos modificar de nuevo indicando que datos le pasamos al tener ahora el ID automático.
+                        // Modificamos indicando que datos le pasamos al tener el ID automático.
                         if (esNueva) {
                             val nuevaPelicula = Pelicula(
                                 titulo = titulo,

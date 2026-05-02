@@ -57,8 +57,9 @@ fun LoginScreen(
             tint = MaterialTheme.colorScheme.primary
         )
 
+        // Internacionalizamos el título de la app para la mejora objetada por el profesor.
         Text(
-            text = stringResource(R.string.txt_Welcome),
+            text = stringResource(R.string.app_name_display),
             fontSize = 32.sp,
             color = MaterialTheme.colorScheme.primary
         )
@@ -68,13 +69,13 @@ fun LoginScreen(
         CineInput(
             value = email,
             onValueChange = { email = it; errorEmail = false },
-            label = "Correo electrónico",
+            label = stringResource(R.string.txt_email),
             isError = errorEmail,
             leadingIcon = {
                 Icon(painter = painterResource(id = R.drawable.ic_email), contentDescription = null)
             },
             supportingText = {
-                if (errorEmail) Text("El correo no puede estar vacío!")
+                if (errorEmail) Text(stringResource(R.string.txt_errorEmail))
             }
         )
 
@@ -83,14 +84,14 @@ fun LoginScreen(
         CineInput(
             value = password,
             onValueChange = { password = it; errorPassword = false },
-            label = "Contraseña",
+            label = stringResource(R.string.txt_password),
             visualTransformation = PasswordVisualTransformation(),
             isError = errorPassword,
             leadingIcon = {
                 Icon(painter = painterResource(id = R.drawable.ic_password), contentDescription = null)
             },
             supportingText = {
-                if (errorPassword) Text("La contraseña no puede estar vacía!")
+                if (errorPassword) Text(stringResource(R.string.txt_errorPassword))
             }
         )
 
@@ -114,11 +115,13 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         TextButton(onClick = { onNavigateToRegistro() }) {
-            Text("¿No tienes cuenta? Regístrate aquí")
+            Text(stringResource(R.string.txt_no_account))
         }
     }
 }
 
+// Añadimos la anotación PreviewScreenSizes para probar diferentes pantallas para la mejora objetada por el profesor.
+@androidx.compose.ui.tooling.preview.PreviewScreenSizes
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {

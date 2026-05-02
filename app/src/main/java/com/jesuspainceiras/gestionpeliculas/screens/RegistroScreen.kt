@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jesuspainceiras.gestionpeliculas.R
 import com.jesuspainceiras.gestionpeliculas.components.CineInput
+import androidx.core.content.edit
 
 @Composable
 fun RegistroScreen(
@@ -53,10 +54,11 @@ fun RegistroScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        // Internacionalizamos las etiquetas de los inputs para la mejora objetada por el profesor.
         CineInput(
             value = nombre,
             onValueChange = { nombre = it; errorVacio = false },
-            label = "Nombre completo",
+            label = stringResource(R.string.txt_name),
             isError = errorVacio
         )
 
@@ -65,7 +67,7 @@ fun RegistroScreen(
         CineInput(
             value = email,
             onValueChange = { email = it; errorVacio = false },
-            label = "Correo electrónico",
+            label = stringResource(R.string.txt_email),
             isError = errorVacio
         )
 
@@ -74,7 +76,7 @@ fun RegistroScreen(
         CineInput(
             value = password1,
             onValueChange = { password1 = it; errorVacio = false; errorContrasenas = false },
-            label = "Escriba la contraseña",
+            label = stringResource(R.string.txt_write_password),
             visualTransformation = PasswordVisualTransformation(),
             isError = errorVacio || errorContrasenas
         )
@@ -84,7 +86,7 @@ fun RegistroScreen(
         CineInput(
             value = password2,
             onValueChange = { password2 = it; errorVacio = false; errorContrasenas = false },
-            label = "Repita la contraseña",
+            label = stringResource(R.string.txt_repeatPassword),
             visualTransformation = PasswordVisualTransformation(),
             isError = errorVacio || errorContrasenas
         )
@@ -106,8 +108,8 @@ fun RegistroScreen(
                 errorContrasenas = password1 != password2
 
                 if (!errorVacio && !errorContrasenas) {
-                    // GUARDAMOS EL EMAIL EN SHAREDPREFERENCES.
-                    sharedPreferences.edit().putString("email_registrado", email).apply()
+                    // GUARDAR EL EMAIL EN SHAREDPREFERENCES. Modifico esta linea con la sugerencia de cambio del IDE
+                    sharedPreferences.edit { putString("email_registrado", email) }
 
                     onNavigateToLogin()
                 }
@@ -120,11 +122,13 @@ fun RegistroScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         TextButton(onClick = { onNavigateToLogin() }) {
-            Text("¿Ya tienes cuenta? Inicia sesión")
+            Text(stringResource(R.string.txt_already_account))
         }
     }
 }
 
+// Añadimos la anotación PreviewScreenSizes para la mejora objetada por el profesor.
+@androidx.compose.ui.tooling.preview.PreviewScreenSizes
 @Preview(showBackground = true)
 @Composable
 fun RegistroScreenPreview() {

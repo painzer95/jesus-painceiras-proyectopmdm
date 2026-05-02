@@ -13,9 +13,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jesuspainceiras.gestionpeliculas.R
 import com.jesuspainceiras.gestionpeliculas.models.Pelicula
 import kotlinx.coroutines.launch
 
@@ -30,6 +32,10 @@ fun ListaPeliculasScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
+    // Extraemos los textos de la notificación aquí arriba para evitar el fallo dentro de la corrutina.
+    val mensajeBorrado = stringResource(R.string.txt_movie_deleted)
+    val textoDeshacer = stringResource(R.string.txt_undo)
+
     // Alerta de confirmación de borrado.
     var mostrarDialogoBorrar by remember { mutableStateOf(false) }
     var peliculaABorrarIndex by remember { mutableStateOf(-1) }
@@ -38,18 +44,19 @@ fun ListaPeliculasScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text("Lista de películas", color = MaterialTheme.colorScheme.onPrimary) },
+                // Internacionalizamos los textos de la barra superior y los botones.
+                title = { Text(stringResource(R.string.txt_movie_list), color = MaterialTheme.colorScheme.onPrimary) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
         },
         floatingActionButton = {
             FloatingActionButton(
-                // Modificamos el paso del parámetro a una cadena vacía para la mejora objetada por el profesor.
+                // Modificamos el paso del parámetro a una cadena vacía.
                 onClick = { onNavigateToFormulario("") }, // Cadena vacía para crear una nueva.
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
-                Icon(Icons.Filled.Add, contentDescription = "Añadir película")
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.txt_add_movie))
             }
         }
     ) { paddingValues ->
@@ -66,7 +73,7 @@ fun ListaPeliculasScreen(
             itemsIndexed(peliculas) { index, pelicula ->
                 TarjetaPelicula(
                     pelicula = pelicula,
-                    onClick = { onNavigateToFormulario(pelicula.id) }, // Editamos la película pasando su ID.
+                    onClick = { onNavigateToFormulario(pelicula.id) }, // Editar película pasando su ID.
                     onDeleteClick = {
                         peliculaABorrarIndex = index
                         mostrarDialogoBorrar = true
@@ -81,8 +88,8 @@ fun ListaPeliculasScreen(
         if (mostrarDialogoBorrar) {
             AlertDialog(
                 onDismissRequest = { mostrarDialogoBorrar = false },
-                title = { Text("Eliminar película") },
-                text = { Text("Estás seguro de que quieres borrar esta película?") },
+                title = { Text(stringResource(R.string.txt_delete_movie)) },
+                text = { Text(stringResource(R.string.txt_confirm_delete)) },
                 confirmButton = {
                     Button(
                         onClick = {
@@ -95,9 +102,10 @@ fun ListaPeliculasScreen(
 
                             // Lanzamos el SnackBar para poder deshacer.
                             coroutineScope.launch {
+                                // Utilizamos las variables preparadas previamente.
                                 val resultado = snackbarHostState.showSnackbar(
-                                    message = "Película eliminada",
-                                    actionLabel = "Deshacer",
+                                    message = mensajeBorrado,
+                                    actionLabel = textoDeshacer,
                                     duration = SnackbarDuration.Short
                                 )
                                 if (resultado == SnackbarResult.ActionPerformed) {
@@ -107,12 +115,12 @@ fun ListaPeliculasScreen(
                             }
                         }
                     ) {
-                        Text("Sí, borrar")
+                        Text(stringResource(R.string.txt_yes_delete))
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { mostrarDialogoBorrar = false }) {
-                        Text("Cancelar")
+                        Text(stringResource(R.string.txt_cancel))
                     }
                 }
             )
@@ -156,8 +164,9 @@ fun TarjetaPelicula(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = "Género: ${pelicula.genero}", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
-                Text(text = "Director: ${pelicula.director}", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
+                // Formateamos las cadenas usando stringResource con argumentos.
+                Text(text = stringResource(R.string.txt_genre_label, pelicula.genero), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
+                Text(text = stringResource(R.string.txt_director_label, pelicula.director), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
             }
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -170,7 +179,7 @@ fun TarjetaPelicula(
                 Spacer(modifier = Modifier.height(8.dp))
                 // Botón de papelera.
                 IconButton(onClick = { onDeleteClick() }) {
-                    Icon(Icons.Filled.Delete, contentDescription = "Borrar película", tint = MaterialTheme.colorScheme.error)
+                    Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.txt_delete_movie_desc), tint = MaterialTheme.colorScheme.error)
                 }
             }
         }
