@@ -103,16 +103,22 @@ fun RegistroScreen(
 
         Button(
             onClick = {
-                // Modificamos las validaciones usando isBlank para evitar registros vacíos o con espacios para la mejora objetada por el profesor.
-                errorVacio = nombre.isBlank() || email.isBlank() || password1.isBlank() || password2.isBlank()
-                errorContrasenas = password1 != password2
+                // Limpiamos los textos de espacios en blanco al principio y al final.
+                val nombreLimpio = nombre.trim()
+                val emailLimpio = email.trim()
+                val pass1Limpia = password1.trim()
+                val pass2Limpia = password2.trim()
+
+                // Modificamos las validaciones usando isBlank sobre las variables limpias para evitar registros vacíos o con espacios.
+                errorVacio = nombreLimpio.isBlank() || emailLimpio.isBlank() || pass1Limpia.isBlank() || pass2Limpia.isBlank()
+                errorContrasenas = pass1Limpia != pass2Limpia
 
                 if (!errorVacio && !errorContrasenas) {
-                    // GUARDAR EL EMAIL EN SHAREDPREFERENCES. Modifico esta linea con la sugerencia de cambio del IDE.
+                    // GUARDAR EL EMAIL EN SHAREDPREFERENCES. Guardamos los datos limpios de espacios.
                     sharedPreferences.edit {
-                        putString("email_registrado", email)
+                        putString("email_registrado", emailLimpio)
                         // Añadimos también el guardado de la contraseña para la validación v1.1.
-                        putString("password_registrada", password1)
+                        putString("password_registrada", pass1Limpia)
                     }
 
                     onNavigateToLogin()

@@ -109,14 +109,18 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                // Modificamos las validaciones usando isBlank y simplificamos la lógica para la mejora objetada por el profesor.
-                errorEmail = email.isBlank()
-                errorPassword = password.isBlank()
+                // Limpiamos los textos introducidos al darle a entrar.
+                val emailLimpio = email.trim()
+                val passLimpia = password.trim()
+
+                // Modificamos las validaciones usando isBlank sobre las variables limpias.
+                errorEmail = emailLimpio.isBlank()
+                errorPassword = passLimpia.isBlank()
 
                 if (!errorEmail && !errorPassword) {
                     // Validamos contra la cuenta guardada en memoria o la cuenta de administrador que hemos creado por defecto.
-                    val esCuentaGuardada = email == emailGuardado && password == passwordGuardada && emailGuardado.isNotEmpty()
-                    val esCuentaAdmin = email == "admin@cineapp.com" && password == "1234"
+                    val esCuentaGuardada = emailLimpio == emailGuardado && passLimpia == passwordGuardada && emailGuardado.isNotEmpty()
+                    val esCuentaAdmin = emailLimpio == "admin@cineapp.com" && passLimpia == "1234"
 
                     if (esCuentaGuardada || esCuentaAdmin) {
                         onLoginSuccess()

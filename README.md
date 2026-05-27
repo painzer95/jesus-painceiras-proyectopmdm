@@ -2,9 +2,18 @@
 
 Práctica de desarrollo Android utilizando Jetpack Compose (Material Design 3).
 
+## 📸 Vistas de la aplicación
+*![login.png](captures/login.png)*
+*![lista.png](captures/lista.png)*
+
+<div align="center">
+  <img src="captures/login.png" width="250" alt="login"/>
+  <img src="captures/lista.png" width="250" alt="lista"/>
+</div>
+
 ## 🚀 Prueba la aplicación
 Puedes probar la aplicación directamente desde tu navegador sin necesidad de instalar nada gracias a Appetize.io:
-👉 **[Enlace a la demo en Appetize.io](https://appetize.io/app/b_zzvc4dbkrv766tllpthvctocim)**
+👉 **[Enlace a la demo en Appetize.io](https://appetize.io/app/b_3t77hc4kqjlyg7qpqu6aygeykq)**
 
 ## 🛠️ Mejoras implementadas y Justificación Técnica
 
@@ -24,8 +33,9 @@ A continuación, se detallan las decisiones técnicas tomadas para cumplir y mej
 * Para adaptar la lógica existente sin romper la creación de objetos, se instanciaron los datos en el `MockData` utilizando parámetros nombrados explícitos de Kotlin (ej. `titulo = "..."`), permitiendo que el ID se genere implícitamente por defecto.
 * Se actualizó la navegación (`AppNavigation`) y las rutas (`PantallaFormulario`) para transferir el ID de la película (String) en lugar de su índice (Int) en la lista, garantizando la persistencia e inmutabilidad de la referencia.
 
-### 4. Lógica de Negocio y Validaciones
-* Se implementó la función `.isBlank()` en los formularios de registro y login para evitar la creación de cuentas "vacías" o compuestas únicamente por espacios en blanco.
+### 4. Lógica de Negocio y Validaciones (v1.2)
+* Se implementó la función `.isBlank()` en los formularios de registro y login para evitar la creación de cuentas "vacías" o compuestas únicamente por espacios.
+* **Sanitización de Entradas:** Se añadió la función `.trim()` a las variables de registro y login para capturar y limpiar espacios en blanco accidentales al principio o al final de la cadena de texto de contraseñas y correos, previniendo errores de inicio de sesión de falsos positivos (por ejemplo: "testtest ").
 * Se añadió una validación estricta en la edición y creación de películas para asegurar que la calificación (nota) esté forzosamente contenida entre `0.0` y `10.0`.
 
 ### 5. Internacionalización y Multi-Preview
@@ -34,4 +44,4 @@ A continuación, se detallan las decisiones técnicas tomadas para cumplir y mej
 
 ---
 **Autor:** Jesús Painceiras  
-**Versión:** 1.0
+**Versión:** 1.2

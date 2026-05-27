@@ -2,22 +2,19 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
     namespace = "com.jesuspainceiras.gestionpeliculas"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.jesuspainceiras.gestionpeliculas"
         minSdk = 28
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -57,11 +54,14 @@ dependencies {
     implementation(libs.androidx.compose.material3)
 
     // Librerías de Jetpack Navigation3
-    implementation("androidx.navigation3:navigation3-runtime:1.1.1")
     implementation("androidx.navigation3:navigation3-ui:1.1.1")
+    implementation("androidx.navigation3:navigation3-runtime:1.1.1")
 
     // Librería para usar @Serializable
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.11.0")
+
+    // Librería de iconos
+    implementation("androidx.compose.material:material-icons-extended")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
