@@ -51,9 +51,13 @@ fun AppNavigation() {
 
             entry<PantallaLista> {
                 ListaPeliculasScreen(
-                    peliculas = misPeliculasMock,
                     onNavigateToFormulario = { id ->
                         backStack.add(PantallaFormulario(id))
+                    },
+                    // Le indicamos qué hacer cuando la pantalla nos avise de que el token ha caducado
+                    onTokenCaducado = {
+                        backStack.clear()
+                        backStack.add(PantallaLogin)
                     }
                 )
             }

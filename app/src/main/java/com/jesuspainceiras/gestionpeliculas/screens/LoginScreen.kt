@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -11,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jesuspainceiras.gestionpeliculas.R
 import com.jesuspainceiras.gestionpeliculas.components.CineInput
+import com.jesuspainceiras.gestionpeliculas.data.remote.InstanciaRetrofit
+import com.jesuspainceiras.gestionpeliculas.data.remote.LoginRequest
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -32,7 +38,7 @@ fun LoginScreen(
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE)
 
-    // Leemos el email guardado y también la contraseña para la validación v1.1. Si no hay nada, devolvemos un texto vacío.
+    // Leemos el email y contraseña guardados localmente para nuestro sistema de respaldo.
     val emailGuardado = sharedPreferences.getString("email_registrado", "") ?: ""
     val passwordGuardada = sharedPreferences.getString("password_registrada", "") ?: ""
 
@@ -42,8 +48,11 @@ fun LoginScreen(
 
     var errorEmail by remember { mutableStateOf(false) }
     var errorPassword by remember { mutableStateOf(false) }
-    // Añadimos un estado para mostrar el error si las credenciales fallan.
     var errorCredenciales by remember { mutableStateOf(false) }
+
+    // Añadimos las variables para gestionar la carga y la corrutina para la llamada a la API.
+    var cargando by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -60,7 +69,7 @@ fun LoginScreen(
             tint = MaterialTheme.colorScheme.primary
         )
 
-        // Internacionalizamos el título de la app para la mejora objetada por el profesor.
+        // Internacionalizamos el título de la app.
         Text(
             text = stringResource(R.string.app_name_display),
             fontSize = 32.sp,
@@ -71,7 +80,7 @@ fun LoginScreen(
 
         CineInput(
             value = email,
-            // Limpiamos también el error de credenciales si el usuario empieza a escribir de nuevo.
+            // Limpiamos también el error de credenciales si empezamos a escribir de nuevo.
             onValueChange = { email = it; errorEmail = false; errorCredenciales = false },
             label = stringResource(R.string.txt_email),
             isError = errorEmail || errorCredenciales,
@@ -99,7 +108,7 @@ fun LoginScreen(
             }
         )
 
-        // Mostramos el mensaje si el login es incorrecto.
+        // Mostramos el mensaje si el login es incorrecto o falla la petición en ambos métodos.
         if (errorCredenciales) {
             Spacer(modifier = Modifier.height(8.dp))
             Text("Credenciales incorrectas. Verifica tu email y contraseña.", color = MaterialTheme.colorScheme.error, fontSize = 12.sp)
@@ -107,31 +116,53 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Button(
-            onClick = {
-                // Limpiamos los textos introducidos al darle a entrar.
-                val emailLimpio = email.trim()
-                val passLimpia = password.trim()
+        // Si estamos esperando la respuesta del servidor, mostramos el indicador de carga.
+        if (cargando) {
+            CircularProgressIndicator()
+        } else {
+            // Usamos un botón sólido normal.
+            Button(
+                onClick = {
+                    val emailLimpio = email.trim()
+                    val passLimpia = password.trim()
 
-                // Modificamos las validaciones usando isBlank sobre las variables limpias.
-                errorEmail = emailLimpio.isBlank()
-                errorPassword = passLimpia.isBlank()
+                    errorEmail = emailLimpio.isBlank()
+                    errorPassword = passLimpia.isBlank()
 
-                if (!errorEmail && !errorPassword) {
-                    // Validamos contra la cuenta guardada en memoria o la cuenta de administrador que hemos creado por defecto.
-                    val esCuentaGuardada = emailLimpio == emailGuardado && passLimpia == passwordGuardada && emailGuardado.isNotEmpty()
-                    val esCuentaAdmin = emailLimpio == "admin@cineapp.com" && passLimpia == "1234"
+                    if (!errorEmail && !errorPassword) {
+                        cargando = true
 
-                    if (esCuentaGuardada || esCuentaAdmin) {
-                        onLoginSuccess()
-                    } else {
-                        errorCredenciales = true
+                        coroutineScope.launch {
+                            try {
+                                val peticion = LoginRequest(email = emailLimpio, password = passLimpia)
+                                val respuesta = InstanciaRetrofit.api.iniciarSesion(peticion)
+
+                                sharedPreferences.edit().putString("token_api", respuesta.token).apply()
+                                onLoginSuccess()
+                            } catch (e: Exception) {
+                                // Si el servidor falla (timeout de BD), activamos nuestro MODO RESPALDO.
+                                val esCuentaGuardada = emailLimpio == emailGuardado && passLimpia == passwordGuardada && emailGuardado.isNotEmpty()
+                                val esCuentaAdmin = emailLimpio == "admin@cineapp.com" && passLimpia == "1234"
+
+                                if (esCuentaGuardada || esCuentaAdmin) {
+                                    // Entramos en modo local guardando un token ficticio.
+                                    sharedPreferences.edit().putString("token_api", "TOKEN_LOCAL_MOCK").apply()
+                                    onLoginSuccess()
+                                } else {
+                                    // Si tampoco coinciden las credenciales locales, marcamos error.
+                                    errorCredenciales = true
+                                }
+                            } finally {
+                                cargando = false
+                            }
+                        }
                     }
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(R.string.txt_buttonLogin))
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Text(stringResource(R.string.txt_buttonLogin))
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -142,7 +173,6 @@ fun LoginScreen(
     }
 }
 
-// Añadimos la anotación PreviewScreenSizes para probar diferentes pantallas para la mejora objetada por el profesor.
 @androidx.compose.ui.tooling.preview.PreviewScreenSizes
 @Preview(showBackground = true)
 @Composable

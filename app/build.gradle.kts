@@ -63,6 +63,18 @@ dependencies {
     // Librería de iconos
     implementation("androidx.compose.material:material-icons-extended")
 
+    // Implementamos Retrofit y OkHttp para gestionar las peticiones HTTP
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    // Configuramos Kotlinx Serialization para traducir los JSON del servidor
+    implementation("com.squareup.retrofit2:converter-kotlinx-serialization:2.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+
+    // Incorporamos Coil para descargar y cargar las carátulas desde URLs
+    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
